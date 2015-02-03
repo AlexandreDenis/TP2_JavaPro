@@ -39,19 +39,31 @@
 	<div class="container">
 		<h2>Upload de fichiers</h2>
 	 
-		Filière : 
-		<h:selectOneListbox size="1">
-		   	<f:selectItem itemValue="1" itemLabel="F1" />
-		   	<f:selectItem itemValue="2" itemLabel="F2" />
-		   	<f:selectItem itemValue="3" itemLabel="F3" />
-		   	<f:selectItem itemValue="4" itemLabel="F4" />
-		   	<f:selectItem itemValue="5" itemLabel="F5" />
-		   	<f:selectItem itemValue="6" itemLabel="F6" />
-		</h:selectOneListbox>
-		
-		<br/>
-		
-		<h:button value="Upload (.csv)" outcome="main.xhtml" />
+	 	<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+	 
+	 	<h:form enctype="multipart/form-data">
+			Filière : 
+			<h:selectOneListbox size="1" value="#{uploadManagedBean.filiere}">
+			   	<f:selectItem itemValue="1" itemLabel="F1" />
+			   	<f:selectItem itemValue="2" itemLabel="F2" />
+			   	<f:selectItem itemValue="3" itemLabel="F3" />
+			   	<f:selectItem itemValue="4" itemLabel="F4" />
+			   	<f:selectItem itemValue="5" itemLabel="F5" />
+			   	<f:selectItem itemValue="6" itemLabel="F6" />
+			</h:selectOneListbox>
+			
+			<br/>
+			
+			<h:inputFile id="file" value="#{uploadManagedBean.file}" >
+				<f:validator validatorId="FileValidator" />
+			</h:inputFile>
+			
+			<br/>
+			<br/>
+			
+			<h:commandButton value="Upload (.csv)" action="#{uploadManagedBean.uploadFile}" class="btn" />
+		</h:form>
+		<!-- <h:button value="Upload (.csv)" outcome="main.xhtml" />-->
 	</div>
     <script src="js/bootstrap.min.js"></script>
 </h:body>  
