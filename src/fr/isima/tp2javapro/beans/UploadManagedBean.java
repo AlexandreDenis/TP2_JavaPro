@@ -2,8 +2,10 @@ package fr.isima.tp2javapro.beans;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Scanner;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
@@ -12,7 +14,9 @@ import javax.servlet.http.Part;
 import com.isima.creationannotation.annotations.EJB;
 import com.isima.creationannotation.container.EJBContainer;
 
+import fr.isima.tp2javapro.datas.Row;
 import fr.isima.tp2javapro.ejbs.IMarksManager;
+import fr.isima.tp2javapro.ejbs.MarksManager;
 
 @ManagedBean
 public class UploadManagedBean implements Serializable {
@@ -21,8 +25,24 @@ public class UploadManagedBean implements Serializable {
 	@EJB
 	private IMarksManager mManager;
 	
+	// données
 	private String filiere;
+	private List<Row> mRows;
+	
 	private Part file;
+	
+	@PostConstruct
+	private void init(){
+		try {
+			EJBContainer.createEJBContainer(this.getClass().getClassLoader());
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	// getters et setters
 	public String getFiliere() {
@@ -41,6 +61,14 @@ public class UploadManagedBean implements Serializable {
 		this.file = file;
 	}
 	
+	public List<Row> getmRows() {
+		return mRows;
+	}
+
+	public void setmRows(List<Row> mRows) {
+		this.mRows = mRows;
+	}
+
 	/**
 	 * Upload d'un fichier .csv
 	 * @return le nom de la page à laquelle accéder
@@ -64,16 +92,27 @@ public class UploadManagedBean implements Serializable {
 			}
 			
 			if(mManager == null){
+				try {
+					EJBContainer.createEJBContainer(MarksManager.class.getClassLoader());
+				} catch (InstantiationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				EJBContainer.getInstance().manage(this);
 			}
 			
 			// on persiste les données importées
-			mManager.importCVSFile(fileContent);
+			mManager.importCVSFile(Integer.parseInt(filiere), fileContent);
 			
-			return "main.xhtml";
+			mRows = mManager.getRows(Integer.parseInt(filiere));
+			
+			return "main.xhtml?";
 		} else {
 			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur : ", "Veuillez import un fichier."));
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur : ", "Veuillez importer un fichier."));
 		}
 		
 		return null;

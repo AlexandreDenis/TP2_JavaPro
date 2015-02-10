@@ -40,6 +40,24 @@
 		<h2>Gestion des données</h2>
 		
 		<h3>Filière #{uploadManagedBean.filiere}</h3>
+		
+		<p:dataTable var="mark" value="#{uploadManagedBean.mRows}">
+		    <p:column headerText="Nom">
+		        <h:outputText value="#{mark.mNom}" />
+		    </p:column>
+		 
+		    <p:column headerText="Prénom">
+		        <h:outputText value="#{mark.mPrenom}" />
+		    </p:column>
+		 
+		    <p:column headerText="Matière">
+		        <h:outputText value="#{mark.mMatiere}" />
+		    </p:column>
+		 
+		    <p:column headerText="Note">
+		        <h:outputText value="#{mark.mNote}" />
+		    </p:column>
+		</p:dataTable>
 	</div>
     <script src="js/bootstrap.min.js"></script>
 </h:body>  

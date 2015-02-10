@@ -1,11 +1,50 @@
 package fr.isima.tp2javapro.ejbs;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.isima.creationannotation.annotations.PersistenceContext;
 import com.isima.creationannotation.annotations.Stateless;
+import com.isima.creationannotation.container.EntityManager;
+
+import fr.isima.tp2javapro.datas.Row;
 
 @Stateless
 public class MarksManager implements IMarksManager{
-	public int importCVSFile(String fileContent){
-		System.out.println("file content = " + fileContent);
+	
+	@PersistenceContext
+	EntityManager mEntityManager;
+	
+	public int importCVSFile(int filiere, String fileContent){
+		Row newRow;
+		String[] lines = fileContent.split("\n");
+		
+		// parsage du fichier .csv
+		for(String line : lines){
+			String[] fields = line.split(";");
+			if(fields.length >= 4){
+				String nom = fields[0];
+				String prenom = fields[1];
+				String matiere = fields[2];
+				Double note = Double.parseDouble(fields[3]);
+				newRow = new Row(filiere, nom, prenom, matiere, note);
+				mEntityManager.persist(filiere, newRow);
+				//System.out.println(filiere + " : " + newRow);
+			}
+		}
+		
 		return 0;
+	}
+	
+	@Override
+	public List<Row> getRows(int filiere) {
+		List<Row> res = new ArrayList<Row>();
+		List<Object> objs = mEntityManager.get(filiere);
+		
+		for(Object obj : objs){
+			res.add((Row)obj);
+		}
+		
+		return res;
 	}
 }

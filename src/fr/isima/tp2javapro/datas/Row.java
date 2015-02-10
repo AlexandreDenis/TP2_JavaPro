@@ -5,8 +5,10 @@ import java.io.Serializable;
 public class Row implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
+	private static int currentId = 0;
+	
 	// attributs
-	private String mId;
+	private int mId;
 	private int mFiliere;
 	private String mNom;
 	private String mPrenom;
@@ -16,6 +18,7 @@ public class Row implements Serializable{
 	// constructeur
 	public Row(int mFiliere, String mNom, String mPrenom, String mMatiere, double mNote) {
 		super();
+		this.mId = currentId++;
 		this.mFiliere = mFiliere;
 		this.mNom = mNom;
 		this.mPrenom = mPrenom;
@@ -24,11 +27,11 @@ public class Row implements Serializable{
 	}
 
 	// getters et setters
-	public String getmId() {
+	public int getmId() {
 		return mId;
 	}
 
-	public void setmId(String mId) {
+	public void setmId(int mId) {
 		this.mId = mId;
 	}
 
@@ -70,5 +73,12 @@ public class Row implements Serializable{
 
 	public void setmNote(double mNote) {
 		this.mNote = mNote;
+	}
+
+	@Override
+	public String toString() {
+		return "Row [mId=" + mId + ", mFiliere=" + mFiliere + ", mNom=" + mNom
+				+ ", mPrenom=" + mPrenom + ", mMatiere=" + mMatiere
+				+ ", mNote=" + mNote + "]";
 	}
 }
