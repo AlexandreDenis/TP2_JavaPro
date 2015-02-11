@@ -2,24 +2,23 @@ package fr.isima.tp2javapro.beans;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Part;
 
 import com.isima.creationannotation.annotations.EJB;
 import com.isima.creationannotation.container.EJBContainer;
 
-import fr.isima.tp2javapro.datas.Row;
 import fr.isima.tp2javapro.ejbs.IMarksManager;
 import fr.isima.tp2javapro.ejbs.MarksManager;
 
 @ManagedBean
+@SessionScoped
 public class UploadManagedBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -28,7 +27,6 @@ public class UploadManagedBean implements Serializable {
 	
 	// données
 	private String filiere;
-	private List<Row> mRows;
 	
 	private Part file;
 	
@@ -37,10 +35,8 @@ public class UploadManagedBean implements Serializable {
 		try {
 			EJBContainer.createEJBContainer(this.getClass().getClassLoader());
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -61,21 +57,12 @@ public class UploadManagedBean implements Serializable {
 	public void setFile(Part file) {
 		this.file = file;
 	}
-	
-	public List<Row> getmRows() {
-		return mRows;
-	}
-
-	public void setmRows(List<Row> mRows) {
-		this.mRows = mRows;
-	}
 
 	/**
 	 * Upload d'un fichier .csv
 	 * @return le nom de la page à laquelle accéder
 	 */
 	public String uploadFile() throws Exception{
-		System.out.println("UPLOADFILE()");
 		String fileContent = "";
 		
 		if(file != null){
@@ -108,7 +95,7 @@ public class UploadManagedBean implements Serializable {
 			// on persiste les données importées
 			mManager.importCVSFile(Integer.parseInt(filiere), fileContent);
 			
-			mRows = mManager.getRows(Integer.parseInt(filiere));
+			//mRows = mManager.getRows(Integer.parseInt(filiere));
 			
 			return "main.xhtml";
 		} else {
@@ -117,28 +104,5 @@ public class UploadManagedBean implements Serializable {
 		}
 		
 		return null;
-	}
-	
-	/**
-	 * Recharge les données du tableau
-	 */
-	public String loadData(){
-		int filiereToLoad;
-		
-		try {
-			EJBContainer.getInstance().manage(this);
-		} catch (Exception e){
-			e.printStackTrace();
-		}
-		
-		if(filiere != null){
-			filiereToLoad = Integer.parseInt(filiere);
-		} else {
-			filiereToLoad = 1;	// filiere chargée par défaut
-		}
-		
-		mRows = mManager.getRows(filiereToLoad);
-		
-		return "";
 	}
 }

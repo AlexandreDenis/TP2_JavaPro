@@ -9,13 +9,14 @@
 	
 	<!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen" />
+    <link href="css/main.css" rel="stylesheet" media="screen" />
     <style>
       body {
         padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
       }
     </style>
 </h:head>
-<h:body onload="#{uploadManagedBean.loadData()}">  
+<h:body onload="#{dataTableManagedBean.loadData()}">  
 	<div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
@@ -42,7 +43,7 @@
 		<h3>Sélection de la filière</h3>
 		
 		<h:form enctype="multipart/form-data" class="form-search">
-			<h:selectOneListbox id="filiere" size="1" value="#{uploadManagedBean.filiere}" >
+			<h:selectOneListbox id="filiere" size="1" value="#{dataTableManagedBean.filiere}" >
 				   	<f:selectItem itemValue="1" itemLabel="F1" />
 				   	<f:selectItem itemValue="2" itemLabel="F2" />
 				   	<f:selectItem itemValue="3" itemLabel="F3" />
@@ -51,12 +52,17 @@
 				   	<f:selectItem itemValue="6" itemLabel="F6" />
 			</h:selectOneListbox>
 			
-			<h:commandButton value="Voir" action="#{uploadManagedBean.loadData}" class="btn" />
+			<h:commandButton value="Voir" action="#{dataTableManagedBean.loadData}" class="btn" />
 		</h:form>
 		
-		<h3>Filière #{uploadManagedBean.filiere}</h3>
+		<h3>Filière #{dataTableManagedBean.filiere}</h3>
 		
-		<p:dataTable var="mark" value="#{uploadManagedBean.mRows}">
+		<p:growl id="msgs" showDetail="true" />
+		<p:dataTable var="mark" value="#{dataTableManagedBean.mRows}" editable="true">
+		    
+		    <p:ajax event="rowEdit" listener="#{dataTableManagedBean.onRowEdit}" update=":msgs" />
+       		<p:ajax event="rowEditCancel" listener="#{dataTableManagedBean.onRowCancel}" update=":msgs" />
+		    
 		    <p:column headerText="Nom">
 		        <h:outputText value="#{mark.mNom}" />
 		    </p:column>
@@ -72,6 +78,10 @@
 		    <p:column headerText="Note">
 		        <h:outputText value="#{mark.mNote}" />
 		    </p:column>
+		    
+		    <p:column style="width:20px">
+           		<p:rowEditor />
+       		</p:column>
 		</p:dataTable>
 	</div>
     <script src="js/bootstrap.min.js"></script>
