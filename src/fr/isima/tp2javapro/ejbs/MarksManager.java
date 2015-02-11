@@ -41,8 +41,10 @@ public class MarksManager implements IMarksManager{
 		List<Row> res = new ArrayList<Row>();
 		List<Object> objs = mEntityManager.get(filiere);
 		
-		for(Object obj : objs){
-			res.add((Row)obj);
+		if(objs != null){
+			for(Object obj : objs){
+				res.add((Row)obj);
+			}
 		}
 		
 		return res;

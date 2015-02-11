@@ -2,6 +2,7 @@ package fr.isima.tp2javapro.beans;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -109,12 +110,35 @@ public class UploadManagedBean implements Serializable {
 			
 			mRows = mManager.getRows(Integer.parseInt(filiere));
 			
-			return "main.xhtml?";
+			return "main.xhtml";
 		} else {
 			FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erreur : ", "Veuillez importer un fichier."));
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * Recharge les données du tableau
+	 */
+	public String loadData(){
+		int filiereToLoad;
+		
+		try {
+			EJBContainer.getInstance().manage(this);
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		
+		if(filiere != null){
+			filiereToLoad = Integer.parseInt(filiere);
+		} else {
+			filiereToLoad = 1;	// filiere chargée par défaut
+		}
+		
+		mRows = mManager.getRows(filiereToLoad);
+		
+		return "";
 	}
 }

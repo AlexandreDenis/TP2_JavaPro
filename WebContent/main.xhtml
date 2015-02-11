@@ -15,7 +15,7 @@
       }
     </style>
 </h:head>
-<h:body>  
+<h:body onload="#{uploadManagedBean.loadData()}">  
 	<div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
@@ -38,6 +38,21 @@
 	
 	<div class="container">
 		<h2>Gestion des données</h2>
+		
+		<h3>Sélection de la filière</h3>
+		
+		<h:form enctype="multipart/form-data" class="form-search">
+			<h:selectOneListbox id="filiere" size="1" value="#{uploadManagedBean.filiere}" >
+				   	<f:selectItem itemValue="1" itemLabel="F1" />
+				   	<f:selectItem itemValue="2" itemLabel="F2" />
+				   	<f:selectItem itemValue="3" itemLabel="F3" />
+				   	<f:selectItem itemValue="4" itemLabel="F4" />
+				   	<f:selectItem itemValue="5" itemLabel="F5" />
+				   	<f:selectItem itemValue="6" itemLabel="F6" />
+			</h:selectOneListbox>
+			
+			<h:commandButton value="Voir" action="#{uploadManagedBean.loadData}" class="btn" />
+		</h:form>
 		
 		<h3>Filière #{uploadManagedBean.filiere}</h3>
 		
