@@ -7,4 +7,5 @@ import fr.isima.tp2javapro.datas.Row;
 public interface IMarksManager {
 	int importCVSFile(int filiere, String fileContent);
 	List<Row> getRows(int filiere);
+	void addRow(int filiere, Row row);
 }

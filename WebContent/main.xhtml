@@ -55,6 +55,41 @@
 			<h:commandButton value="Voir" action="#{dataTableManagedBean.loadData}" class="btn" />
 		</h:form>
 		
+		<h3>Ajout d'une note</h3>
+		<h:form class="form-horizontal">
+			<!-- Nom -->
+			<div class="control-group">
+			  <h:outputText class="control-label" value="Nom : " />
+			  <div class="controls">
+			    <h:inputText id="input_nom" type="text" value="#{dataTableManagedBean.nom}" />
+			  </div>
+			</div>
+			<!-- Prénom -->
+			<div class="control-group">
+			  <h:outputText class="control-label" value="Prénom : " />
+			  <div class="controls">
+			    <h:inputText type="text" value="#{dataTableManagedBean.prenom}" />
+			  </div>
+			</div>
+			<!-- Matière -->
+			<div class="control-group">
+			  <h:outputText class="control-label" value="Matière : " />
+			  <div class="controls">
+			    <h:inputText type="text" value="#{dataTableManagedBean.matiere}" />
+			  </div>
+			</div>
+			<!-- Note -->
+			<div class="control-group">
+			  <h:outputText class="control-label" value="Note : " />
+			  <div class="controls">
+			    <h:inputText type="text" value="#{dataTableManagedBean.note}" />
+			  </div>
+			</div>
+			
+			<h:commandButton value="Ajouter" action="#{dataTableManagedBean.addRow}" class="btn btn-primary" 
+				style="margin-left:10cm;" />
+		</h:form>
+		
 		<h3>Filière #{dataTableManagedBean.filiere}</h3>
 		
 		<h:form id="form">
@@ -72,15 +107,24 @@
 			    </p:column>
 			 
 			    <p:column headerText="Prénom">
-			        <h:outputText value="#{mark.mPrenom}" />
+			    	<p:cellEditor>
+			        	<f:facet name="output"><h:outputText value="#{mark.mPrenom}" /></f:facet>
+			        	<f:facet name="input"><h:inputText value="#{mark.mPrenom}" /></f:facet>
+			        </p:cellEditor>
 			    </p:column>
 			 
 			    <p:column headerText="Matière">
-			        <h:outputText value="#{mark.mMatiere}" />
+			    	<p:cellEditor>
+			        	<f:facet name="output"><h:outputText value="#{mark.mMatiere}" /></f:facet>
+			        	<f:facet name="input"><h:inputText value="#{mark.mMatiere}" /></f:facet>
+			        </p:cellEditor>
 			    </p:column>
 			 
 			    <p:column headerText="Note">
-			        <h:outputText value="#{mark.mNote}" />
+			    	<p:cellEditor>
+			        	<f:facet name="output"><h:outputText value="#{mark.mNote}" /></f:facet>
+			        	<f:facet name="input"><h:inputText value="#{mark.mNote}" /></f:facet>
+			        </p:cellEditor>
 			    </p:column>
 			    
 			    <p:column style="width:20px">

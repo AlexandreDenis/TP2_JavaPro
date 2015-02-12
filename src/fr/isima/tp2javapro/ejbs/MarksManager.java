@@ -49,4 +49,9 @@ public class MarksManager implements IMarksManager{
 		
 		return res;
 	}
+	
+	@Override
+	public void addRow(int filiere, Row row) {
+		mEntityManager.persist(filiere, row);
+	}
 }

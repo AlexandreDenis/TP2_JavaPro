@@ -8,7 +8,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
-import org.primefaces.event.CellEditEvent;
 import org.primefaces.event.RowEditEvent;
 
 import com.isima.creationannotation.annotations.EJB;
@@ -29,6 +28,14 @@ public class DataTableManagedBean implements Serializable{
 	private List<Row> mRows;
 	private String filiere;
 	
+	// données pour l'ajout d'une ligne
+	private String Nom;
+	private String Prenom;
+	private String Matiere;
+	private String Note;
+	
+	private boolean NomValid = true;
+	
 	public List<Row> getmRows() {
 		return mRows;
 	}
@@ -42,6 +49,37 @@ public class DataTableManagedBean implements Serializable{
 		this.filiere = filiere;
 	}
 	
+	public String getNom() {
+		return Nom;
+	}
+	public void setNom(String nom) {
+		Nom = nom;
+	}
+	public String getPrenom() {
+		return Prenom;
+	}
+	public void setPrenom(String prenom) {
+		Prenom = prenom;
+	}
+	public String getMatiere() {
+		return Matiere;
+	}
+	public void setMatiere(String matiere) {
+		Matiere = matiere;
+	}
+	public String getNote() {
+		return Note;
+	}
+	public void setNote(String note) {
+		Note = note;
+	}
+
+	public boolean NomValid() {
+		return NomValid;
+	}
+	public void setNomValid(boolean isNomValid) {
+		this.NomValid = isNomValid;
+	}
 	/**
 	 * Recharge les données du tableau
 	 */
@@ -88,14 +126,40 @@ public class DataTableManagedBean implements Serializable{
         FacesMessage msg = new FacesMessage("Edition annulée", "id : " + Integer.toString(((Row) event.getObject()).getmId()));
         FacesContext.getCurrentInstance().addMessage(null, msg);
     }
-     
-    public void onCellEdit(CellEditEvent event) {
-        /*Object oldValue = event.getOldValue();
-        Object newValue = event.getNewValue();
-         
-        if(newValue != null && !newValue.equals(oldValue)) {
-            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_INFO, "Cell Changed", "Old: " + oldValue + ", New:" + newValue);
+    
+    public String addRow(){
+    	double valNote = 0;
+    	
+    	if(Nom == "" || Prenom == "" || Matiere == "" || Note == ""){
+    		FacesMessage msg = new FacesMessage("Erreur", "Veuillez renseigner tous les champs");
             FacesContext.getCurrentInstance().addMessage(null, msg);
-        }*/
+    	} else {
+    		try{
+    			valNote = Double.parseDouble(Note);
+    		} catch(NumberFormatException e){
+    			FacesMessage msg = new FacesMessage("Erreur", "La note renseignée doit être un nombre");
+                FacesContext.getCurrentInstance().addMessage(null, msg);
+    		}
+    		
+    		// tout s'est bien passé
+    		// on peut effectuer l'enregistrement
+    		Row newRow = new Row(Integer.parseInt(filiere), Nom, Prenom, Matiere, valNote);
+    		
+    		try {
+    			EJBContainer.getInstance().manage(this);
+    		} catch (Exception e){
+    			e.printStackTrace();
+    		}
+    		
+    		mManager.addRow(Integer.parseInt(filiere), newRow);
+    		
+    		// on remet les champs à vide
+    		Nom = "";
+    		Prenom = "";
+    		Matiere = "";
+    		Note = "";
+    	}
+    	
+    	return loadData();
     }
 }
