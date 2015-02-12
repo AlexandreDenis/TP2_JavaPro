@@ -57,32 +57,37 @@
 		
 		<h3>Filière #{dataTableManagedBean.filiere}</h3>
 		
-		<p:growl id="msgs" showDetail="true" />
-		<p:dataTable var="mark" value="#{dataTableManagedBean.mRows}" editable="true">
-		    
-		    <p:ajax event="rowEdit" listener="#{dataTableManagedBean.onRowEdit}" update=":msgs" />
-       		<p:ajax event="rowEditCancel" listener="#{dataTableManagedBean.onRowCancel}" update=":msgs" />
-		    
-		    <p:column headerText="Nom">
-		        <h:outputText value="#{mark.mNom}" />
-		    </p:column>
-		 
-		    <p:column headerText="Prénom">
-		        <h:outputText value="#{mark.mPrenom}" />
-		    </p:column>
-		 
-		    <p:column headerText="Matière">
-		        <h:outputText value="#{mark.mMatiere}" />
-		    </p:column>
-		 
-		    <p:column headerText="Note">
-		        <h:outputText value="#{mark.mNote}" />
-		    </p:column>
-		    
-		    <p:column style="width:20px">
-           		<p:rowEditor />
-       		</p:column>
-		</p:dataTable>
+		<h:form id="form">
+			<p:growl id="msgs" showDetail="true" />
+			<p:dataTable var="mark" value="#{dataTableManagedBean.mRows}" editable="true">
+			    
+			    <p:ajax event="rowEdit" listener="#{dataTableManagedBean.onRowEdit}" update=":form:msgs" />
+	       		<p:ajax event="rowEditCancel" listener="#{dataTableManagedBean.onRowCancel}" update=":form:msgs" />
+			    
+			    <p:column headerText="Nom">
+			    	<p:cellEditor>
+			    		<f:facet name="output"><h:outputText value="#{mark.mNom}" /></f:facet>
+			        	<f:facet name="input"><h:inputText value="#{mark.mNom}" /></f:facet>
+			    	</p:cellEditor>
+			    </p:column>
+			 
+			    <p:column headerText="Prénom">
+			        <h:outputText value="#{mark.mPrenom}" />
+			    </p:column>
+			 
+			    <p:column headerText="Matière">
+			        <h:outputText value="#{mark.mMatiere}" />
+			    </p:column>
+			 
+			    <p:column headerText="Note">
+			        <h:outputText value="#{mark.mNote}" />
+			    </p:column>
+			    
+			    <p:column style="width:20px">
+	           		<p:rowEditor />
+	       		</p:column>
+			</p:dataTable>
+		</h:form>
 	</div>
     <script src="js/bootstrap.min.js"></script>
 </h:body>  
