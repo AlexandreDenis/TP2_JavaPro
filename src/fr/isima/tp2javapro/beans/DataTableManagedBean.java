@@ -80,6 +80,7 @@ public class DataTableManagedBean implements Serializable{
 	public void setNomValid(boolean isNomValid) {
 		this.NomValid = isNomValid;
 	}
+	
 	/**
 	 * Recharge les données du tableau
 	 */
@@ -139,6 +140,7 @@ public class DataTableManagedBean implements Serializable{
     		} catch(NumberFormatException e){
     			FacesMessage msg = new FacesMessage("Erreur", "La note renseignée doit être un nombre");
                 FacesContext.getCurrentInstance().addMessage(null, msg);
+                return "";
     		}
     		
     		// tout s'est bien passé

@@ -15,7 +15,7 @@
       }
     </style>
 </h:head>
-<h:body>  
+<h:body onload="#{statManagedBean.loadData()}">  
 	<div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
@@ -38,6 +38,29 @@
 	
 	<div class="container">
 		<h2>Statistiques</h2>
+		
+		<h3>Sélection de la filière</h3>
+		
+		<h:form enctype="multipart/form-data" class="form-search">
+			<h:selectOneListbox id="filiere" size="1" value="#{statManagedBean.filiere}" >
+				   	<f:selectItem itemValue="1" itemLabel="F1" />
+				   	<f:selectItem itemValue="2" itemLabel="F2" />
+				   	<f:selectItem itemValue="3" itemLabel="F3" />
+				   	<f:selectItem itemValue="4" itemLabel="F4" />
+				   	<f:selectItem itemValue="5" itemLabel="F5" />
+				   	<f:selectItem itemValue="6" itemLabel="F6" />
+			</h:selectOneListbox>
+			
+			<h:commandButton value="Voir" action="#{statManagedBean.loadData}" class="btn" />
+		</h:form>
+		
+		<h3>Filière #{statManagedBean.filiere}</h3>
+		
+		<!-- Moyenne par matière -->
+		<p:chart type="bar" model="#{statManagedBean.moyenneModel}" style="height:300px" />
+		
+		<!-- Moyenne par élève -->
+		<p:chart type="bar" model="#{statManagedBean.moyenneEleveModel}" style="height:300px" />
 	</div>
     <script src="js/bootstrap.min.js"></script>
 </h:body>  
