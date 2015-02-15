@@ -54,4 +54,35 @@ public class MarksManager implements IMarksManager{
 	public void addRow(int filiere, Row row) {
 		mEntityManager.persist(filiere, row);
 	}
+	
+	@Override
+	public List<String> getMatieres(int filiere) {
+		List<String> res = new ArrayList<String>();
+		
+		List<Row> rows = getRows(filiere);
+		
+		for(Row r : rows){
+			if(!res.contains(r.getmMatiere())){
+				res.add(r.getmMatiere());
+			}
+		}
+		
+		return res;
+	}
+	
+	@Override
+	public List<String> getEleves(int filiere) {
+		List<String> res = new ArrayList<String>();
+		
+		List<Row> rows = getRows(filiere);
+		
+		for(Row r : rows){
+			String eleve = r.getmPrenom() + " " + r.getmNom();
+			if(!res.contains(eleve)){
+				res.add(eleve);
+			}
+		}
+		
+		return res;
+	}
 }

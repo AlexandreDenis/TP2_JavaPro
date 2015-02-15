@@ -1,7 +1,10 @@
 package fr.isima.tp2javapro.beans;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -33,6 +36,12 @@ public class DataTableManagedBean implements Serializable{
 	private String Prenom;
 	private String Matiere;
 	private String Note;
+	
+	// filtres
+	private String matiereFilter;  
+    private Map<String,String> matieresFilter;
+    private String eleveFilter;  
+    private Map<String,String> elevesFilter;
 	
 	private boolean NomValid = true;
 	
@@ -81,6 +90,34 @@ public class DataTableManagedBean implements Serializable{
 		this.NomValid = isNomValid;
 	}
 	
+	public String getMatiereFilter() {
+		return matiereFilter;
+	}
+	
+	public void setMatiereFilter(String matiereFilter) {
+		this.matiereFilter = matiereFilter;
+	}
+	
+	public Map<String, String> getMatieresFilter() {
+		return matieresFilter;
+	}
+	
+	public void setMatieresFilter(Map<String, String> matieresFilter) {
+		this.matieresFilter = matieresFilter;
+	}
+	
+	public String getEleveFilter() {
+		return eleveFilter;
+	}
+	public void setEleveFilter(String eleveFilter) {
+		this.eleveFilter = eleveFilter;
+	}
+	public Map<String, String> getElevesFilter() {
+		return elevesFilter;
+	}
+	public void setElevesFilter(Map<String, String> elevesFilter) {
+		this.elevesFilter = elevesFilter;
+	}
 	/**
 	 * Recharge les données du tableau
 	 */
@@ -115,7 +152,37 @@ public class DataTableManagedBean implements Serializable{
 		
 		mRows = mManager.getRows(filiereToLoad);
 		
+		// initialisation des filtres
+		initFiltres();
+		
 		return "";
+	}
+	
+	private void initFiltres(){
+		List<String> listMatieres = null;
+		List<String> listEleves = null;
+		
+		try {
+			EJBContainer.getInstance().manage(this);
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		
+		// Matières
+		listMatieres = mManager.getMatieres(Integer.parseInt(filiere));
+		matiereFilter = null;
+		matieresFilter = new HashMap<String, String>();
+		for(String str : listMatieres){
+			matieresFilter.put(str, str);
+		}
+		
+		// Elèves
+		listEleves = mManager.getEleves(Integer.parseInt(filiere));
+		eleveFilter = null;
+		elevesFilter = new HashMap<String, String>();
+		for(String str : listEleves){
+			elevesFilter.put(str, str);
+		}
 	}
 	
 	public void onRowEdit(RowEditEvent event) {
@@ -163,5 +230,46 @@ public class DataTableManagedBean implements Serializable{
     	}
     	
     	return loadData();
+    }
+    
+    public void onFiltersChange() {
+    	List<Row> listMatchMatiere = new ArrayList<Row>();
+    	List<Row> listMatchEleve = new ArrayList<Row>();
+    	
+    	try {
+			EJBContainer.getInstance().manage(this);
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+    	
+    	mRows = mManager.getRows(Integer.parseInt(filiere));
+    	
+    	// on applique les filtres
+		if(matiereFilter != null && !matiereFilter.equals("")){
+			for(Row r : mRows){
+				if(r.getmMatiere().equals(matiereFilter)){
+					listMatchMatiere.add(r);
+				}
+			}
+		}
+		
+		if(eleveFilter != null && !eleveFilter.equals("")){
+			for(Row r : mRows){
+				String currEleve = r.getmPrenom() + " " + r.getmNom();
+				if(currEleve.equals(eleveFilter)){
+					listMatchEleve.add(r);
+				}
+			}
+		}
+		
+		if(listMatchMatiere.size() > 0 
+				&& listMatchEleve.size() > 0){
+			listMatchEleve.retainAll(listMatchMatiere);
+			mRows = listMatchEleve;
+		} else if(listMatchMatiere.size() > 0){
+			mRows = listMatchMatiere;
+		} else if(listMatchEleve.size() > 0){
+			mRows = listMatchEleve;
+		}
     }
 }

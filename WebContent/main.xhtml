@@ -92,9 +92,25 @@
 		
 		<h3>Filière #{dataTableManagedBean.filiere}</h3>
 		
+		<!-- Filtres -->
+		<h:form class="form-inline">
+	        <p:selectOneMenu id="matiere" value="#{dataTableManagedBean.matiereFilter}" style="width:150px">
+	            <p:ajax update=":form" listener="#{dataTableManagedBean.onFiltersChange}" />
+	            <f:selectItem itemLabel="Matière" itemValue="" noSelectionOption="true" />
+	            <f:selectItems value="#{dataTableManagedBean.matieresFilter}" />
+	        </p:selectOneMenu>
+	        
+	        <p:selectOneMenu id="eleve" value="#{dataTableManagedBean.eleveFilter}" style="width:150px">
+	            <p:ajax update=":form" listener="#{dataTableManagedBean.onFiltersChange}" />
+	            <f:selectItem itemLabel="Elève" itemValue="" noSelectionOption="true" />
+	            <f:selectItems value="#{dataTableManagedBean.elevesFilter}" />
+	        </p:selectOneMenu>
+	    </h:form>
+		
+		<!-- Tableau de données -->
 		<h:form id="form">
 			<p:growl id="msgs" showDetail="true" />
-			<p:dataTable var="mark" value="#{dataTableManagedBean.mRows}" editable="true">
+			<p:dataTable id="dataTable" var="mark" value="#{dataTableManagedBean.mRows}" editable="true">
 			    
 			    <p:ajax event="rowEdit" listener="#{dataTableManagedBean.onRowEdit}" update=":form:msgs" />
 	       		<p:ajax event="rowEditCancel" listener="#{dataTableManagedBean.onRowCancel}" update=":form:msgs" />
