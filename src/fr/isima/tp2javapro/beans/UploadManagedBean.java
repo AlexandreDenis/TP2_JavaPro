@@ -33,7 +33,7 @@ public class UploadManagedBean implements Serializable {
 	@PostConstruct
 	private void init(){
 		try {
-			EJBContainer.createEJBContainer(this.getClass().getClassLoader());
+			EJBContainer.createEJBContainer();
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
@@ -81,7 +81,7 @@ public class UploadManagedBean implements Serializable {
 			
 			if(mManager == null){
 				try {
-					EJBContainer.createEJBContainer(MarksManager.class.getClassLoader());
+					EJBContainer.createEJBContainer();
 				} catch (InstantiationException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

@@ -93,7 +93,7 @@
 		<h3>Filière #{dataTableManagedBean.filiere}</h3>
 		
 		<!-- Filtres -->
-		<h:form class="form-inline">
+		<h:form id="filters" class="form-inline">
 	        <p:selectOneMenu id="matiere" value="#{dataTableManagedBean.matiereFilter}" style="width:150px">
 	            <p:ajax update=":form" listener="#{dataTableManagedBean.onFiltersChange}" />
 	            <f:selectItem itemLabel="Matière" itemValue="" noSelectionOption="true" />
